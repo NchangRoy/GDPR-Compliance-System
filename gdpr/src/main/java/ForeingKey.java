@@ -3,12 +3,14 @@ import java.util.List;
 public class ForeingKey {
     String destinationTable;
     List<String> destinationColumn;
+    List<String > sourceColumn;
     boolean isUnique;
     
-    public ForeingKey(String destinationTable, List<String> destinationColumn, boolean isUnique) {
+    public ForeingKey(String destinationTable, List<String> destinationColumn,List<String> sourceColumn, boolean isUnique) {
         this.destinationTable = destinationTable;
         this.destinationColumn = destinationColumn;
         this.isUnique = isUnique;
+        this.sourceColumn=sourceColumn;
     }
     
     public String getDestinationTable() {
@@ -37,6 +39,14 @@ public class ForeingKey {
         return "destinationTable: "+destinationTable+
             "\n "+columns+
             "\n isUnique:"+isUnique;
+    }
+
+    public List<String> getSourceColumn() {
+        return sourceColumn;
+    }
+
+    public void setSourceColumn(List<String> sourceColumn) {
+        this.sourceColumn = sourceColumn;
     }
 
 }

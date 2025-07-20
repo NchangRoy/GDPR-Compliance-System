@@ -1,6 +1,51 @@
 public class Main {
      public static void main(String[] args) throws Exception {
 
+        String sql1="""
+                -- 1. Users table (originally marked as DATA_SUBJECT)
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(100)
+    -- Add more user fields as needed
+);
+
+-- 2. Stories table (author OWNED_BY users)
+CREATE TABLE stories (
+    id INT PRIMARY KEY,
+    title TEXT,
+    content TEXT,
+    author INT NOT NULL,
+    FOREIGN KEY (author) REFERENCES users(id)
+);
+
+-- 3. Tags table
+CREATE TABLE tags (
+    id INT PRIMARY KEY,
+    tag TEXT
+    -- Add more fields if needed
+);
+
+-- 4. Taggings table (story_id OWNED_BY stories, tag_id ACCESSES tags)
+CREATE TABLE taggings (
+    id INT PRIMARY KEY,
+    story_id INT NOT NULL,
+    tag_id INT NOT NULL,
+    FOREIGN KEY (story_id) REFERENCES stories(id),
+    FOREIGN KEY (tag_id) REFERENCES tags(id)
+);
+
+-- 5. Messages table (sender/receiver OWNED_BY users, ON DELETE SET NULL ≈ ANON)
+CREATE TABLE messages (
+    id INT PRIMARY KEY,
+    body TEXT,
+    sender INT NULL,
+    receiver INT NULL,
+    FOREIGN KEY (sender) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (receiver) REFERENCES users(id) ON DELETE SET NULL
+);
+
+                """;
 
         String query="""
                 -- Users table: data subjects
@@ -233,8 +278,9 @@ CREATE TABLE Event_Ticket_Assignment (
 
 
         JSqlParser parser=new JSqlParser();
-        Graph graph=new Graph(parser.Parser(query));
+        Graph graph=new Graph(parser.Parser(sql1));
         graph.annotate("users");
+        graph.deletionSequence("users");
 
 
         /*
@@ -246,6 +292,8 @@ CREATE TABLE Event_Ticket_Assignment (
            graph.annotate("Users");
 
          */
+
+         
 
     }
 }

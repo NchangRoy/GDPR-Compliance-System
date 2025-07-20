@@ -1,6 +1,6 @@
 public class Node {
     String tableName;
-
+    String primaryKey;
     public Node(String tableName) {
         this.tableName = tableName;
     }
